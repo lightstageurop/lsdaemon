@@ -95,8 +95,12 @@ class LightStage:
         self.check_control_arguments(arc, light, r, g, b)
         if w:
             with self._w_lock:
-                self._wc[arc][2*light].rgb = (r, 0, g)
-                self._wc[arc][2*light+1].rgb = (0, b, 0)
+                self._wc[arc][2*light].red = r
+                self._wc[arc][2*light].green = 0
+                self._wc[arc][2*light].blue = g
+                self._wc[arc][2*light+1].red = 0
+                self._wc[arc][2*light+1].green = b
+                self._wc[arc][2*light+1].blue = 0
         else:
             with self._rgb_lock:
                 self._rgbc[arc][2*light].red = r
