@@ -29,10 +29,10 @@ class LightStage:
             # Each bulb's channels are (R, x, G, x, B, x)
             # Register them consecutively in the controllers' DMX universes
             for j in range(lights_per_arc):
-                ps_RGB.append(FixtureRGB(3*j))
-                ps_RGB.append(FixtureRGB(3*j))
-                ps_W.append(FixtureRGB(3*j))
-                ps_W.append(FixtureRGB(3*j))
+                ps_RGB.append(FixtureRGB(6*j))
+                ps_RGB.append(FixtureRGB(6*j+3))
+                ps_W.append(FixtureRGB(6*j))
+                ps_W.append(FixtureRGB(6*j+3))
             self._rgbc.append(ps_RGB)
             self._wc.append(ps_W)
         # Initialise locking mechanism
