@@ -8,7 +8,7 @@ to DMX controllers. It should be initialised on an independent thread.
 """
 class LightStage:
 
-    def __init__(self, addr='10.37.211.', render_interval=10, arc=12, lights_per_arc=14):
+    def __init__(self, addr='10.37.211.', render_interval=100, arc=12, lights_per_arc=14):
         if render_interval <= 0:
             raise ValueError("render_interval must be positive")
         self.render_interval = render_interval
