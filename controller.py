@@ -1,6 +1,6 @@
 from kinet import *
-from threading import Lock, Thread
-from time import monotonic, sleep
+from threading import Event, Lock, Thread
+from time import monotonic
 
 """
 Responsible for accepting control signals from wrappers and proxying them
@@ -38,11 +38,13 @@ class LightStage:
         # Initialise locking mechanism
         self._rgb_lock = Lock()
         self._w_lock = Lock()
+        self._stop = Event()
         # Initialise renderer thread
-        Thread(
+        self._renderer = Thread(
             target=self._mainloop,
             name="Renderer"
-        ).start()
+        )
+        self._renderer.start()
 
     def _render(self):
         # Render the current buffer to the DMX controllers
@@ -65,15 +67,28 @@ class LightStage:
     def _mainloop(self):
         interval = self.render_interval / 1000
         next_render = monotonic()
-        while True:
+        while not self._stop.is_set():
             self._render()
             next_render += interval
 
             delay = next_render - monotonic()
             if delay > 0:
-                sleep(delay)
+                self._stop.wait(delay)
             else:
                 next_render = monotonic()
+
+    """
+    Stops the renderer thread and waits for it to exit.
+    """
+    def stop(self):
+        self._stop.set()
+        self._renderer.join()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop()
 
     """
     Checks if control arguments are in range and valid.
