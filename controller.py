@@ -79,10 +79,14 @@ class LightStage:
     Checks if control arguments are in range and valid.
     """
     def check_control_arguments(self, arc, light, r, g, b):
-        assert light >= 0 and light < self.lights_per_arc, "light value is not between 0 and 13"
-        assert arc >= 0 and arc < self.arc, "arc value is not between 0 and 11"
-        assert min(r, g, b) >= 0.0 and max(
-            r, g, b) <= 255.0, "intensity values are not between 0 and 255"
+        if light < 0 or light >= self.lights_per_arc:
+            raise ValueError(
+                "light value must be between 0 and %d" % (self.lights_per_arc - 1)
+            )
+        if arc < 0 or arc >= self.arc:
+            raise ValueError("arc value must be between 0 and %d" % (self.arc - 1))
+        if min(r, g, b) < 0.0 or max(r, g, b) > 255.0:
+            raise ValueError("intensity values must be between 0 and 255")
 
     """
     Controls 1 specific light on 1 specific arc. When w=True, white lights
