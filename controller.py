@@ -99,8 +99,12 @@ class LightStage:
                 self._wc[arc][2*light+1].rgb = (0, b, 0)
         else:
             with self._rgb_lock:
-                self._rgbc[arc][2*light].rgb = (r, 0, g)
-                self._rgbc[arc][2*light+1].rgb = (0, b, 0)
+                self._rgbc[arc][2*light].red = r
+                self._rgbc[arc][2*light].green = 0
+                self._rgbc[arc][2*light].blue = g
+                self._rgbc[arc][2*light+1].red = 0
+                self._rgbc[arc][2*light+1].green = b
+                self._rgbc[arc][2*light+1].blue = 0
 
 if __name__ == '__main__':
     stage = LightStage()
